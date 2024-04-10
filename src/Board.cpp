@@ -63,12 +63,16 @@ Cell& Board::getCell(const int y, const int x)
     return cellArray[y][x];
 }
 
-std::optional<bool> Board::handleInput(const int y, const int x)
+std::optional<bool> Board::handleInput(const int y, const int x, const InputMode mode)
 {
+    if(mode == InputMode::flag)
+    {
+        cellArray[y][x].flagged = true;
+        return std::nullopt;
+    }
     if(cellArray[y][x].mine)
     {
         {
-            std::cout << "Ya LOST board" << std::endl;
             cellArray[y][x].revealed = true;
             return false;
         }

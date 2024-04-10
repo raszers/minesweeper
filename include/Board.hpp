@@ -3,6 +3,7 @@
 #include <optional>
 #include "Settings.hpp"
 #include "Cell.hpp"
+#include "InputMode.hpp"
 
 struct Dimensions
 {
@@ -18,7 +19,7 @@ class Board
         ~Board();
         void createCellArray();
         void fillWithMines();
-        std::optional<bool> handleInput(const int, const int);
+        std::optional<bool> handleInput(const int, const int, const InputMode);
         Cell& getCell(const int, const int);
 
     private:

@@ -1,12 +1,26 @@
 #include "Runner.hpp"
 #include <iostream>
 #include <optional>
+#include "InputMode.hpp"
 
 namespace
 {
 void clearConsole() {
     // CSI[2J clears screen, CSI[H moves the cursor to top-left corner
     std::cout << "\x1B[2J\x1B[H";
+}
+
+InputMode decodeInputMode(char c)
+{
+    switch(c)
+    {
+        case 'g':
+            return InputMode::guess;
+        case 'f':
+            return InputMode::flag;
+        default:
+            return InputMode::unknownMode;
+    }
 }
 } //namespace
 
@@ -24,15 +38,17 @@ void Runner::initialize()
 int Runner::run()
 {
     printField();
+    char mode;
     int x, y;
     std::optional<bool> gameOver;
     while(not gameOver)
     {
-        std::cout << "Insert Column [space] Row " << std::endl;
-        std::cin >> x >> y;
+        std::cout << "Insert [mode - f or g] [column] [row]" << std::endl;
+        std::cin >> mode >> x >> y;
         if(y > 0 and y <= settings.boardHeight and x > 0 and x <= settings.boardWidth)
         {
-            gameOver = board.handleInput(y-1,x-1);
+            const InputMode inputMode = decodeInputMode(mode);
+            gameOver = board.handleInput(y-1, x-1, inputMode);
             printField();
         }
         else
@@ -51,6 +67,7 @@ int Runner::run()
     }
     return 0;
 }
+
 
 void Runner::printField()
 {

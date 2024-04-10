@@ -18,6 +18,7 @@ set(SOURCES
 set(HEADERS
     include/Board.hpp
     include/Cell.hpp
+    include/InputMode.hpp
     include/Runner.hpp
     include/Settings.hpp
 )
