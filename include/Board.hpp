@@ -2,13 +2,7 @@
 #include <vector>
 #include <optional>
 #include "Settings.hpp"
-
-struct Cell
-{
-    bool mine{false};
-    int neighboringMines{0};
-    bool revealed{false};
-};
+#include "Cell.hpp"
 
 struct Dimensions
 {
@@ -25,9 +19,7 @@ class Board
         void createCellArray();
         void fillWithMines();
         std::optional<bool> handleInput(const int, const int);
-        bool isCellRevealed(const int, const int);
-        bool isCellMined(const int, const int);
-        int getCellNeighboringMines(const int, const int);
+        Cell& getCell(const int, const int);
 
     private:
         Dimensions dimensions{};

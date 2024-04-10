@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Add all your source files
 set(SOURCES
     src/Board.cpp
+    src/Cell.cpp
     src/main.cpp
     src/Runner.cpp
     src/Settings.cpp
@@ -16,6 +17,7 @@ set(SOURCES
 # Add all your header files
 set(HEADERS
     include/Board.hpp
+    include/Cell.hpp
     include/Runner.hpp
     include/Settings.hpp
 )

@@ -35,6 +35,11 @@ int Runner::run()
             gameOver = board.handleInput(y-1,x-1);
             printField();
         }
+        else
+        {
+            printField();
+            std::cout << "[" << x << "][" << y << "] Out of bounds" << std::endl;
+        }
     }
     if(gameOver.value())
     {
@@ -82,17 +87,8 @@ void Runner::printField()
         } 
         for(int j = 0; j < settings.boardWidth; j++)
         {
-            if(not board.isCellRevealed(i,j))
-            {
-                std::cout << "   |";
-                continue;
-            }
-            if(board.isCellMined(i,j))
-            {
-                std::cout << " X |";
-                continue;
-            }
-            std::cout << " " << board.getCellNeighboringMines(i,j) << " |";
+            const auto& cell = board.getCell(i,j);
+            std::cout << " " << cell << " |";
         }
         std::cout << std::endl;
         std::cout << "----";

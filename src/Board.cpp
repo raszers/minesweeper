@@ -58,24 +58,9 @@ void Board::updateNeigborsAfterMineAdded(int y, int x)
     }
 }
 
-// Cell& Board::getCell(const int y, const int x)
-// {
-//     return cellArray[y][x];
-// }
-
-bool Board::isCellRevealed(const int y, const int x)
+Cell& Board::getCell(const int y, const int x)
 {
-    return cellArray[y][x].revealed;
-}
-
-bool Board::isCellMined(const int y, const int x)
-{
-    return cellArray[y][x].mine;
-}
-
-int Board::getCellNeighboringMines(const int y, const int x)
-{
-    return cellArray[y][x].neighboringMines;
+    return cellArray[y][x];
 }
 
 std::optional<bool> Board::handleInput(const int y, const int x)
@@ -95,7 +80,6 @@ std::optional<bool> Board::handleInput(const int y, const int x)
 void Board::revealCell(const int y, const int x)
 {
     Cell& cell = cellArray[y][x];
-    std::cout << "Revealing cell y=" << y << ", x=" << x << std::endl;
     if(cell.revealed)
     {
         std::cout << "Cell already revealed" << std::endl;
