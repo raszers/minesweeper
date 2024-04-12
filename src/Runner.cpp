@@ -2,6 +2,8 @@
 #include <iostream>
 #include <optional>
 #include "InputMode.hpp"
+#include "Result.hpp"
+#include <algorithm>
 
 namespace
 {
@@ -22,6 +24,27 @@ InputMode decodeInputMode(char c)
             return InputMode::unknownMode;
     }
 }
+bool isGameOver(const Result& in)
+{
+    switch(in)
+    {
+        case Result::win:
+            std::cout << "You won" << std::endl;
+            return true;
+        case Result::mine:
+            std::cout << "Ya LOST" << std::endl;
+            return true;
+        case Result::flag: 
+            std::cout << "You flagged this cell!" << std::endl;
+            return false;
+        case Result::reveal:
+            return false;
+        case Result::unknownError:
+        default:
+            std::cout << "Something went wrong" << std::endl;
+            return true;
+    }
+}
 } //namespace
 
 Runner::Runner(const Settings& settings_)
@@ -38,18 +61,20 @@ void Runner::initialize()
 int Runner::run()
 {
     printField();
-    char mode;
-    int x, y;
-    std::optional<bool> gameOver;
+    bool gameOver{false};
+    
     while(not gameOver)
     {
+        char mode;
+        int x, y;
         std::cout << "Insert [mode - f or g] [column] [row]" << std::endl;
         std::cin >> mode >> x >> y;
         if(y > 0 and y <= settings.boardHeight and x > 0 and x <= settings.boardWidth)
         {
-            const InputMode inputMode = decodeInputMode(mode);
-            gameOver = board.handleInput(y-1, x-1, inputMode);
+            const auto inputMode = decodeInputMode(mode);
+            const auto guessResult = board.handleInput(y-1, x-1, inputMode);
             printField();
+            gameOver = isGameOver(guessResult);
         }
         else
         {
@@ -57,17 +82,8 @@ int Runner::run()
             std::cout << "[" << x << "][" << y << "] Out of bounds" << std::endl;
         }
     }
-    if(gameOver.value())
-    {
-        std::cout << "You won" << std::endl;
-    }
-    else
-    {
-        std::cout << "Ya LOST" << std::endl;
-    }
     return 0;
 }
-
 
 void Runner::printField()
 {

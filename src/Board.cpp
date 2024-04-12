@@ -1,5 +1,4 @@
 #include "Board.hpp"
-#include <iostream>
 #include <tuple>
 #include <cstdlib>
 #include <ctime>
@@ -63,18 +62,23 @@ Cell& Board::getCell(const int y, const int x)
     return cellArray[y][x];
 }
 
-std::optional<bool> Board::handleInput(const int y, const int x, const InputMode mode)
+Result Board::handleInput(const int y, const int x, const InputMode mode)
 {
-    if(mode == InputMode::flag)
+    Cell& cell = cellArray[y][x];
+    if(mode == InputMode::flag and not cell.revealed)
     {
-        cellArray[y][x].flagged = true;
-        return std::nullopt;
+        cell.flagged = !cell.flagged;
+        return Result::reveal;
     }
-    if(cellArray[y][x].mine)
+    if(cell.flagged)
+    {
+        return Result::flag;
+    }
+    if(cell.mine)
     {
         {
-            cellArray[y][x].revealed = true;
-            return false;
+            cell.revealed = true;
+            return Result::mine;
         }
     }
     revealCell(y, x);
@@ -86,7 +90,6 @@ void Board::revealCell(const int y, const int x)
     Cell& cell = cellArray[y][x];
     if(cell.revealed)
     {
-        std::cout << "Cell already revealed" << std::endl;
         return;
     }
     cell.revealed = true;
@@ -106,17 +109,16 @@ void Board::revealCell(const int y, const int x)
     }
 }
 
-std::optional<bool> Board::checkVictoryCondition()
+Result Board::checkVictoryCondition()
 {
     const int cellsToReveal = dimensions.height * dimensions.width - numberOfMines;
     if(revealedCells < cellsToReveal)
     {
-        return std::nullopt;
+        return Result::reveal;
     }
     if(revealedCells > cellsToReveal)
     {
-        std::cout << "cos nie poszlo" << std::endl;
-        return false;
+        return Result::unknownError;
     }
-    return true;
+    return Result::win;
 }

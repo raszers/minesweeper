@@ -19,6 +19,7 @@ set(HEADERS
     include/Board.hpp
     include/Cell.hpp
     include/InputMode.hpp
+    include/Result.hpp
     include/Runner.hpp
     include/Settings.hpp
 )
